@@ -140,14 +140,27 @@ class TheArt:
                          (pt2 + self.offset).to_tuple(), 5)
 
     def draw_symmetric_line(self, pt1, pt2, axis):
+        new_pt1 = pt1
+        new_pt2 = pt2
+        
         if axis == 'v':
-            new_pt1 = pt1
             new_pt1.x = self.symbol_max_width - new_pt1.x
-            new_pt2 = pt2
             new_pt2.x = self.symbol_max_width - new_pt2.x
-            pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255), 
-                            (new_pt1 + self.offset).to_tuple(), 
-                            (new_pt2 + self.offset).to_tuple(), 5)
+
+        elif axis == 'h':
+            new_pt1.y = self.symbol_max_height - new_pt1.y
+            new_pt2.y = self.symbol_max_height - new_pt2.y
+
+        elif axis == 'c':
+            new_pt1.x = self.symbol_max_width - new_pt1.x
+            new_pt2.x = self.symbol_max_width - new_pt2.x
+            new_pt1.y = self.symbol_max_height - new_pt1.y
+            new_pt2.y = self.symbol_max_height - new_pt2.y
+
+        pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255), 
+                         (new_pt1 + self.offset).to_tuple(), 
+                         (new_pt2 + self.offset).to_tuple(), 5)
+
 
     def generate_one_half(self):
         figure = Figure()
