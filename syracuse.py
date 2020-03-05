@@ -1,54 +1,27 @@
 import random as rn
 
-import matplotlib
-import matplotlib.pyplot as plt
+from art import Art
 
-import pygame
-from pygame.locals import QUIT
+class SyracuseArt(Art):
+    def __init__(self):
+        super(SyracuseArt, self).__init__()
 
-def f(val, lst):
-    lst.append(val)
-    if val <= 1:
-        return
-    elif val % 2 == 0:
-        return f(val / 2, lst)
-    else:
-        return f(val + 1, lst)
+    def f(self, val, lst):
+        lst.append(val)
 
-def compute_syracuse(val, max_iter):
-    tests = []
-    for i in range(2000):
-        number = rn.randint(1, 2000000)
-        print(f'Computing for {number}')
-        test = []
-        f(number, test)
-        tests.append(test)
-    plot_art(tests)
+        if val == 1:
+            return
+        elif val % 2 == 0:
+            return self.f(val / 2, lst)
+        else:
+            return self.f(3 * val + 1, lst)
 
-def display_once(data):
-    biggest_x = max([len(x) for x in data])
-    biggest_y = max([max(x) for x in data])
+    def compute_syracuse(self, val, randmin=50000, randmax=200000000000):
+        numbers = rn.sample(range(randmin, randmax), val)
 
-    for curve in data:
-        pass
-
-
-def plot_art(data):
-    pygame.init()
-    screen = pygame.display.set_mode((800, 600))
-
-    continue_display = True
-
-    display_once(data)
-
-    while continue_display:
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                continue_display = False
-
-        pygame.display.flip()
-        
-
-if __name__ == '__main__':
-    compute_syracuse(8, 1)
-    plot_art
+        for n in numbers:
+            # print(f'Computing for {number}')
+            test = []
+            self.f(n, test)
+            test.reverse()
+            self.all_curves.append(test)

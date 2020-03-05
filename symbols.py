@@ -15,7 +15,7 @@ class Direction(Enum):
     BOTTOM_LEFT = 5
     LEFT = 6
     TOP_LEFT = 7
-    
+
 @dataclass
 class Point:
     def __init__(self, x, y, z=None):
@@ -117,7 +117,7 @@ class TheArt:
             point = self.generate_random_point(first_point.x + self.lattice_size, self.symbol_half_w,
                                                first_point.y, first_point.y)
         elif chosen_direction == Direction.BOTTOM_RIGHT:
-            point = self.generate_random_point(first_point.x + self.lattice_size, self.symbol_max_height, 
+            point = self.generate_random_point(first_point.x + self.lattice_size, self.symbol_max_height,
                                                first_point.y + self.lattice_size, self.symbol_max_height)
         elif chosen_direction == Direction.BOTTOM:
             point = self.generate_random_point(first_point.x, first_point.x,
@@ -135,14 +135,14 @@ class TheArt:
         return point
 
     def draw_line(self, pt1, pt2):
-        pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255), 
-                         (pt1 + self.offset).to_tuple(), 
+        pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255),
+                         (pt1 + self.offset).to_tuple(),
                          (pt2 + self.offset).to_tuple(), 5)
 
     def draw_symmetric_line(self, pt1, pt2, axis):
         new_pt1 = pt1
         new_pt2 = pt2
-        
+
         if axis == 'v':
             new_pt1.x = self.symbol_max_width - new_pt1.x
             new_pt2.x = self.symbol_max_width - new_pt2.x
@@ -157,8 +157,8 @@ class TheArt:
             new_pt1.y = self.symbol_max_height - new_pt1.y
             new_pt2.y = self.symbol_max_height - new_pt2.y
 
-        pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255), 
-                         (new_pt1 + self.offset).to_tuple(), 
+        pygame.draw.line(self.screen, pygame.Color(255, 255, 255, 255),
+                         (new_pt1 + self.offset).to_tuple(),
                          (new_pt2 + self.offset).to_tuple(), 5)
 
 
@@ -190,15 +190,15 @@ class TheArt:
 
         if current_time - self.start_time < self.display_delay:
             return
-        
+
         self.start_time = self.get_time()
 
         if self.current_iter < len(self.list_of_figures):
             current_figure = self.list_of_figures[self.current_iter]
             # For debug purpose
-            # pygame.draw.rect(self.screen, pygame.Color(255, 0, 0, 255), 
+            # pygame.draw.rect(self.screen, pygame.Color(255, 0, 0, 255),
             #                  (self.offset.x, self.offset.y, self.symbol_max_width, self.symbol_max_height))
-            
+
             for _, line in enumerate(current_figure.list_of_lines):
                 self.draw_line(line[0], line[1])
                 self.draw_symmetric_line(line[0], line[1], axis='v')
@@ -207,7 +207,7 @@ class TheArt:
             self.current_iter_row += 1
 
             self.offset += Point(self.symbol_max_width + 10, 0)
-            
+
             if self.offset.x > self.surface_width:
                 self.offset += Point(0, self.symbol_max_height + 10)
                 self.offset.x = 0
