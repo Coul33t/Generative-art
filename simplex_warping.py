@@ -1,6 +1,7 @@
 import numpy as np
 from opensimplex import OpenSimplex
 from PIL import Image
+import perlin
 
 class SimplexArt:
     def __init__(self, w, h, s, c1=None, c2=None):
@@ -21,6 +22,8 @@ class SimplexArt:
         print('Generating map...')
         noise_map = np.ndarray((self.w, self.h))
 
+        breakpoint()
+
         if noise_type == 'simplex':
             for y in range(0, self.h):
                 for x in range(0, self.w):
@@ -33,6 +36,10 @@ class SimplexArt:
 
     def generate_warping(self, amplitude=10):
         original_map = self.generate_2d_noise(0, 255)
+
+        display_ori = self.colour_map(original_map)
+        self.display(display_ori)
+
         x_displacement = self.generate_2d_noise(-1, 1)
         y_displacement = self.generate_2d_noise(-1, 1)
 
@@ -72,22 +79,36 @@ class SimplexArt:
 
         return new_map
 
-    def display(self, img=None, mode='RGB'):
-        if not img:
-            img = self.final_map
-
+    def get_image_from_array(self, img, mode):
         if mode == 'L':
             img = Image.fromarray(img.astype('uint8').T, 'L')
         elif mode == 'RGB':
             # Transpose column and rows, not colours
             img = Image.fromarray(img.astype('uint8').transpose(1, 0, 2), 'RGB')
 
+        return img
+
+    def display(self, img=None, mode='RGB'):
+        if img is None:
+            img = self.final_map
+
+        img = self.get_image_from_array(img, mode)
         img.show()
+
+    def save(self, img=None, mode='RGB'):
+        if img is None:
+            img = self.final_map
+
+        if isinstance(img, np.ndarray):
+            img = self.get_image_from_array(img, mode)
+
+        if isinstance(img, Image):
+            img.save('res.png')
 
 
 if __name__ == '__main__':
     c1 = [0, 0, 0]
-    c2 = [150, 150, 255]
+    c2 = [255, 150, 255]
     simplex_art = SimplexArt(1024, 512, 24, c1, c2)
     simplex_art.generate_warping(100)
     simplex_art.display(mode='RGB')
